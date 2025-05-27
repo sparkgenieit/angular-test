@@ -1,0 +1,31 @@
+<nav class="sidebar" [class.collapsed]="!sidebarOpen">
+  <div class="sidebar-header">
+    <h5 *ngIf="sidebarOpen">Menu</h5>
+  </div>
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="#">
+        <span class="icon">🏠</span>
+        <span *ngIf="sidebarOpen">Dashboard</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">
+        <span class="icon">📊</span>
+        <span *ngIf="sidebarOpen">Reports</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">
+        <span class="icon">💳</span>
+        <span *ngIf="sidebarOpen">Billing</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">
+        <span class="icon">⚙️</span>
+        <span *ngIf="sidebarOpen">Settings</span>
+      </a>
+    </li>
+  </ul>
+</nav>
