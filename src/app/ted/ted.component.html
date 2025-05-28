@@ -1,0 +1,92 @@
+Implement a mock JSON api and fill the td values and give me fules
+
+<div class="content">
+  <div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <label>Business Date:</label>
+        <input type="date" class="form-control d-inline w-auto" />
+      </div>
+      <div>
+        <span class="m-4">Processing Result</span>
+        <button class="btn btn-danger">Check Exception</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8">
+        <div class="section-box">
+          <div class="section-header">Billing Summary</div>
+          <table class="table table-bordered text-center custom-table">
+              <tbody>
+          <tr>
+            <td><strong>{{ billing?.dodCharges }}</strong><br/><small>DOD Charges</small></td>
+            <td><strong>{{ billing?.trackingFees }}</strong><br/><small>Tracking & Misc Fees</small></td>
+            <td><strong>{{ billing?.adjustments }}</strong><br/><small>Adjustments</small></td>
+          </tr>
+          <tr>
+            <td><strong>{{ billing?.mioCharges }}</strong><br/><small>MIO Charges</small></td>
+            <td><strong>{{ billing?.mioFlatFees }}</strong><br/><small>MIO Flat Fees</small></td>
+            <td><strong>{{ billing?.totalFee }}</strong><br/><small>Total Fee</small></td>
+          </tr>
+        </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="section-box mb-4">
+          <div class="section-header">Reference Data</div>
+          <table class="table table-bordered text-center custom-table">
+            <tbody>
+               <tr><td><strong>{{ referenceData?.chargeGroups }}</strong><br/><small>Charge Groups</small></td></tr>
+        <tr><td><strong>{{ referenceData?.clients }}</strong><br/><small>Clients</small></td></tr>
+     
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-box">
+          <div class="section-header">User Data</div>
+          <table class="table table-bordered text-center custom-table">
+            <tbody>
+            <tr><td><strong>{{ userData?.internal }}</strong><br/><small>Internal Users</small></td></tr>
+        <tr><td><strong>{{ userData?.external }}</strong><br/><small>External Users</small></td></tr>
+      
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="section-box">
+          <div class="section-header">DOD Source Files Processing Metrics</div>
+          <table class="table table-bordered text-center custom-table">
+            <thead>
+              <tr>
+                <th>Source Application</th>
+                <th>Processed</th>
+                <th>Unknown</th>
+                <th>Unprocessed</th>
+                <th>Verified</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of dodMetrics">
+            <td>{{ row.app }}</td>
+            <td>{{ row.processed }}</td>
+            <td>{{ row.unknown }}</td>
+            <td>{{ row.unprocessed }}</td>
+            <td>{{ row.verified }}</td>
+            <td>{{ row.total }}</td>
+          </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

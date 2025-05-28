@@ -1,0 +1,20 @@
+
+<nav [ngClass]="{ 'sidebar': true, 'collapsed': !sidebarOpen }">
+  <div class="sidebar-header">
+    <h5 *ngIf="sidebarOpen">Menu</h5>
+  </div>
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/ted">
+        <span class="icon">🧠</span>
+        <span *ngIf="sidebarOpen">Ted</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/dod">
+        <span class="icon">📁</span>
+        <span *ngIf="sidebarOpen">Dod</span>
+      </a>
+    </li>
+  </ul>
+</nav>

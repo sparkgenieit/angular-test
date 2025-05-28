@@ -1,0 +1,44 @@
+{
+    "billing": {
+        "dodCharges": 199430.71,
+        "trackingFees": 30097,
+        "adjustments": 0,
+        "mioCharges": 4191.1,
+        "mioFlatFees": 15950,
+        "total": 249668.81
+    },
+    "referenceData": {
+        "chargeGroups": 409,
+        "clients": 224
+    },
+    "userData": {
+        "internal": 111,
+        "external": 70
+    },
+    "dodMetrics": [
+        {
+            "app": "CLEARANCE",
+            "processed": 684536,
+            "unknown": 708,
+            "unprocessed": 0,
+            "verified": 0,
+            "total": 685340
+        },
+        {
+            "app": "FUNDS-DMC",
+            "processed": 46255,
+            "unknown": 0,
+            "unprocessed": 0,
+            "verified": 0,
+            "total": 46255
+        },
+        {
+            "app": "TRIPARTY",
+            "processed": 61774,
+            "unknown": 0,
+            "unprocessed": 0,
+            "verified": 0,
+            "total": 61774
+        }
+    ]
+}
