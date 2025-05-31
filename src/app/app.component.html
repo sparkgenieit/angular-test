@@ -1,9 +1,5 @@
 
-<div [class.sidebar-collapsed]="!sidebarOpen">
-  <app-header (sidebarToggle)="handleSidebarToggle()"></app-header>
-  <app-sidebar [sidebarOpen]="sidebarOpen"></app-sidebar>
 
   <div class="page-wrapper">
     <router-outlet></router-outlet>
   </div>
-</div>

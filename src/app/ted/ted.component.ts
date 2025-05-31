@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DashboardService } from '../services/dashboard.service';
+import { TedService, TedData } from '../services/ted.service';
 
 @Component({
   selector: 'app-ted',
@@ -7,21 +7,23 @@ import { DashboardService } from '../services/dashboard.service';
   styleUrls: ['./ted.component.css']
 })
 export class TedComponent implements OnInit {
-  billing: any;
-  referenceData: any;
-  userData: any;
+  billing: any = null;
+  referenceData: any = null;
+  userData: any = null;
   dodMetrics: any[] = [];
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private tedService: TedService) {}
 
-  ngOnInit() {
-    this.dashboardService.login().subscribe(() => {
-      this.dashboardService.getMockData().subscribe((data: any) => {
+  ngOnInit(): void {
+    this.tedService.getTedData().subscribe((data: TedData | null) => {
+      if (data) {
         this.billing = data.billing;
         this.referenceData = data.referenceData;
         this.userData = data.userData;
         this.dodMetrics = data.dodMetrics;
-      });
+      } else {
+        console.warn('No TED data received');
+      }
     });
   }
 }
