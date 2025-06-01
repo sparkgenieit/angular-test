@@ -1,17 +1,16 @@
-<!-- dod.component.html -->
 <div class="content">
   <div class="container-fluid">
     <div class="row two-column">
-      <!-- Left Column: Reconciliation Results & Depository-Account Results -->
+
+      <!-- ========== LEFT COLUMN ========= -->
       <div class="col-md-6">
         <!-- Reconciliation Results -->
         <div class="section-box mb-4">
-          <div class="section-header">Reconciliation Results</div>
+          <div class="section-header">RECONCILIATION RESULTS</div>
           <table class="table table-bordered text-center custom-table">
             <thead>
-              <tr class="bg-secondary text-white">
-                <th colspan="2" class="py-2">Reconciliation Results</th>
-                <th colspan="2" class="bg-danger text-white py-2">OUT-OF-PROOF</th>
+              <tr class="bg-success text-white">
+                <th colspan="4">IN PROOF</th>
               </tr>
             </thead>
             <tbody>
@@ -19,47 +18,47 @@
                 <td>FRB Reported Positions</td>
                 <td>
                   <strong>
-                    $ {{ reconciliationResults?.frbReportedPositions | number : '1.2-2' }}
+                    $ {{ apiData.frbReportedBal | number:'1.2-2' }}
                   </strong>
                 </td>
                 <td>FRB Reported CUSIP Count</td>
                 <td>
-                  <strong>{{ reconciliationResults?.frbReportedCusipCount }}</strong>
+                  <strong>{{ apiData.totalFrbCount }}</strong>
                 </td>
               </tr>
               <tr>
                 <td>BNY Current Positions</td>
                 <td>
                   <strong>
-                    $ {{ reconciliationResults?.bnyCurrentPositions | number : '1.2-2' }}
+                    $ {{ apiData.bnymCurrentBal | number:'1.2-2' }}
                   </strong>
                 </td>
                 <td>BDC EXTERNAL settled CUSIP Count</td>
                 <td>
-                  <strong>{{ reconciliationResults?.bdcExternalCusipCount }}</strong>
+                  <strong>{{ apiData.totalTradedCount }}</strong>
                 </td>
               </tr>
               <tr>
                 <td>Recon Diff in PAR Value</td>
                 <td class="text-danger">
                   <strong>
-                    $ {{ reconciliationResults?.reconDiffParValue | number : '1.2-2' }}
+                    $ {{ apiData.reconDiffPar | number:'1.2-2' }}
                   </strong>
                 </td>
                 <td>FRB Redemption CUSIP Count</td>
                 <td>
-                  <strong>{{ reconciliationResults?.frbRedemptionCusipCount }}</strong>
+                  <strong>{{ apiData.redemptionCount }}</strong>
                 </td>
               </tr>
               <tr>
                 <td>Recon Diff by Security Position Count</td>
                 <td class="text-danger">
-                  <strong>{{ reconciliationResults?.reconDiffSecurityCount }}</strong>
+                  <strong>{{ apiData.diffCusipCount }}</strong>
                 </td>
                 <td>FRB Redemption PAR</td>
                 <td>
                   <strong>
-                    $ {{ reconciliationResults?.frbRedemptionPar | number : '1.2-2' }}
+                    $ {{ apiData.redemptionPar | number:'1.2-2' }}
                   </strong>
                 </td>
               </tr>
@@ -67,9 +66,11 @@
           </table>
         </div>
 
-        <!-- Depository-Account Results -->
+        <!-- By Depository-Account Reconciliation Results -->
         <div class="section-box mb-4">
-          <div class="section-header">By Depository-Account Reconciliation Results</div>
+          <div class="section-header">
+            BY DEPOSITORY-ACCOUNT RECONCILIATION RESULTS
+          </div>
           <table class="table table-bordered text-center custom-table">
             <thead>
               <tr class="bg-warning text-dark">
@@ -85,29 +86,40 @@
             </thead>
             <tbody>
               <tr>
-                <td>{{ depositoryAccountResults?.['1020'] }}</td>
-                <td>{{ depositoryAccountResults?.['1030'] }}</td>
-                <td>{{ depositoryAccountResults?.['1090'] }}</td>
-                <td>{{ depositoryAccountResults?.['1080'] }}</td>
-                <td>{{ depositoryAccountResults?.['U102'] }}</td>
-                <td>{{ depositoryAccountResults?.['1050'] }}</td>
-                <td>{{ depositoryAccountResults?.['1031'] }}</td>
-                <td>{{ depositoryAccountResults?.['1040'] }}</td>
+                <!-- For each known depoAccountId, call getParBreak(depoId) -->
+                <td>{{ getParBreak('1020') }}</td>
+                <td>{{ getParBreak('1030') }}</td>
+                <td>{{ getParBreak('1090') }}</td>
+                <td>{{ getParBreak('1080') }}</td>
+                <td>{{ getParBreak('U102') }}</td>
+                <td>{{ getParBreak('1050') }}</td>
+                <td>{{ getParBreak('1031') }}</td>
+                <td>{{ getParBreak('1040') }}</td>
+              </tr>
+              <tr>
+                <!-- If you also want to show CUSIP counts beneath each header, you could add a second row: -->
+                <td><small>CUSIPs: {{ getCusipCount('1020') }}</small></td>
+                <td><small>CUSIPs: {{ getCusipCount('1030') }}</small></td>
+                <td><small>CUSIPs: {{ getCusipCount('1090') }}</small></td>
+                <td><small>CUSIPs: {{ getCusipCount('1080') }}</small></td>
+                <td><small>CUSIPs: {{ getCusipCount('U102') }}</small></td>
+                <td><small>CUSIPs: {{ getCusipCount('1050') }}</small></td>
+                <td><small>CUSIPs: {{ getCusipCount('1031') }}</small></td>
+                <td><small>CUSIPs: {{ getCusipCount('1040') }}</small></td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Right Column: External Settlements, Securities Settlements, GL Postings -->
+      <!-- ========== RIGHT COLUMN ========= -->
       <div class="col-md-6 right-col">
         <!-- External Settlements -->
         <div class="section-box mb-4">
           <div class="section-header">
-            External Deliveries / Receives / Net FRB External Settlements
+            EXTERNAL DELIVERIES / RECEIVES / NET FRB EXTERNAL SETTLEMENTS
           </div>
-              <table class="table table-bordered text-center custom-table external‐table">
-
+          <table class="table table-bordered text-center custom-table external-table">
             <thead>
               <tr class="bg-info text-white">
                 <th>Description</th>
@@ -119,39 +131,37 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let ext of externalSettlements">
-                <td>{{ ext.description }}</td>
+              <tr *ngFor="let item of apiData.bdcFrbCashSummary">
+                <td>{{ item.description }}</td>
                 <td>
                   <strong>
-                    $ {{ ext.creditAmount | number : '1.2-2' }}
+                    $ {{ item.creditAmount | number:'1.2-2' }}
                   </strong>
                 </td>
-                <td><strong>{{ ext.creditCount }}</strong></td>
+                <td><strong>{{ item.creditCount }}</strong></td>
                 <td>
                   <strong>
-                    $ {{ ext.debitAmount | number : '1.2-2' }}
+                    $ {{ item.debitAmount | number:'1.2-2' }}
                   </strong>
                 </td>
-                <td><strong>{{ ext.debitCount }}</strong></td>
+                <td><strong>{{ item.debitCount }}</strong></td>
                 <td>
                   <strong>
-                    $ {{ ext.netValue | number : '1.2-2' }}
+                    $ {{ item.netAmount | number:'1.2-2' }}
                   </strong>
                 </td>
               </tr>
               <tr class="bg-success text-white">
-                <td colspan="6">
-                  <strong>RESULTS: IN PROOF</strong>
-                </td>
+                <td colspan="6"><strong>RESULTS: {{ apiData.netSetlSummaryVo.result }}</strong></td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <!-- Securities Settlements -->
+        <!-- Net FRB Securities Settlements (Without Redemptions) -->
         <div class="section-box mb-4">
           <div class="section-header">
-            Net FRB Securities Settlements (Without Redemptions)
+            NET FRB SECURITIES SETTLEMENTS (WITHOUT REDEMPTIONS)
           </div>
           <table class="table table-bordered text-center custom-table">
             <thead>
@@ -166,17 +176,41 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let sec of netSecuritiesSettlements">
-                <td>{{ sec.transferType }}</td>
-                <td><strong>{{ sec.count }}</strong></td>
+              <!-- “Receives” row: find the CR posting, and use creditCount/sum from netSetlSummaryVo -->
+              <tr>
+                <td>Receives</td>
                 <td>
                   <strong>
-                    $ {{ sec.sumNetAmount | number : '1.2-2' }}
+                    {{ apiData.netSetlSummaryVo.creditCount }}
                   </strong>
                 </td>
                 <td>
                   <strong>
-                    $ {{ sec.netDifference | number : '1.2-2' }}
+                    $ {{ apiData.netSetlSummaryVo.creditAmount | number:'1.2-2' }}
+                  </strong>
+                </td>
+                <td>
+                  <strong>
+                    $ {{ apiData.netSetlSummaryVo.netAmount | number:'1.2-2' }}
+                  </strong>
+                </td>
+              </tr>
+              <!-- “Delivers” row: use debitCount from netSetlSummaryVo -->
+              <tr>
+                <td>Delivers</td>
+                <td>
+                  <strong>
+                    {{ apiData.netSetlSummaryVo.debitCount }}
+                  </strong>
+                </td>
+                <td>
+                  <strong>
+                    $ {{ apiData.netSetlSummaryVo.creditAmount | number:'1.2-2' }}
+                  </strong>
+                </td>
+                <td>
+                  <strong>
+                    $ {{ apiData.netSetlSummaryVo.netAmount | number:'1.2-2' }}
                   </strong>
                 </td>
               </tr>
@@ -184,9 +218,11 @@
           </table>
         </div>
 
-        <!-- GL Postings -->
+        <!-- Settlement GL Postings -->
         <div class="section-box mb-4">
-          <div class="section-header">Settlement GL Postings</div>
+          <div class="section-header">
+            SETTLEMENT GL POSTINGS
+          </div>
           <table class="table table-bordered text-center custom-table">
             <thead>
               <tr class="bg-warning text-dark">
@@ -196,58 +232,60 @@
               </tr>
             </thead>
             <tbody>
+              <!-- DR posting (debit) -->
               <tr>
                 <td>GL PST ID</td>
-                <td>{{ settlementGLPostings?.glPstIdDebit }}</td>
-                <td>{{ settlementGLPostings?.glPstIdCredit }}</td>
+                <td>{{ getDebitPosting().glPostingId }}</td>
+                <td>{{ getCreditPosting().glPostingId }}</td>
               </tr>
               <tr>
                 <td>GL PST DT</td>
-                <td>{{ settlementGLPostings?.glPstDtDebit }}</td>
-                <td>{{ settlementGLPostings?.glPstDtCredit }}</td>
+                <td>{{ getDebitPosting().glPstDate }}</td>
+                <td>{{ getCreditPosting().glPstDate }}</td>
               </tr>
               <tr>
                 <td>GL ACCT</td>
-                <td>{{ settlementGLPostings?.glAcctDebit }}</td>
-                <td>{{ settlementGLPostings?.glAcctCredit }}</td>
+                <td>{{ getDebitPosting().glAcNo }}</td>
+                <td>{{ getCreditPosting().glAcNo }}</td>
               </tr>
               <tr>
                 <td>COST CENTER</td>
-                <td>{{ settlementGLPostings?.costCenterDebit }}</td>
-                <td>{{ settlementGLPostings?.costCenterCredit }}</td>
+                <td>{{ getDebitPosting().costCenterCd }}</td>
+                <td>{{ getCreditPosting().costCenterCd }}</td>
               </tr>
               <tr>
                 <td>GL PST AMT</td>
                 <td>
                   <strong>
-                    $ {{ settlementGLPostings?.glPstAmtDebit | number : '1.2-2' }}
+                    {{ getDebitPosting().glPostingAmount | currency:'USD':'symbol':'1.2-2' }}
                   </strong>
                 </td>
                 <td>
                   <strong>
-                    $ {{ settlementGLPostings?.glPstAmtCredit | number : '1.2-2' }}
+                    {{ getCreditPosting().glPostingAmount | currency:'USD':'symbol':'1.2-2' }}
                   </strong>
                 </td>
               </tr>
               <tr>
                 <td>STATUS</td>
-                <td>{{ settlementGLPostings?.statusDebit }}</td>
-                <td>{{ settlementGLPostings?.statusCredit }}</td>
+                <td>{{ getDebitPosting().statCd }}</td>
+                <td>{{ getCreditPosting().statCd }}</td>
               </tr>
               <tr>
                 <td>LST UPD TS</td>
-                <td>{{ settlementGLPostings?.lstUpdTsDebit }}</td>
-                <td>{{ settlementGLPostings?.lstUpdTsCredit }}</td>
+                <td>{{ getDebitPosting().lstUpdTs }}</td>
+                <td>{{ getCreditPosting().lstUpdTs }}</td>
               </tr>
               <tr>
                 <td>LST UPD USER</td>
-                <td>{{ settlementGLPostings?.lstUpdUserDebit }}</td>
-                <td>{{ settlementGLPostings?.lstUpdUserCredit }}</td>
+                <td>{{ getDebitPosting().lstUpdUserId }}</td>
+                <td>{{ getCreditPosting().lstUpdUserId }}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+
     </div>
   </div>
 </div>
