@@ -1,20 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-
-@Component({
-  selector: 'app-ted',
-  templateUrl: './ted.component.html',
-  styleUrls: ['./ted.component.css']
-})
-export class TedComponent implements OnInit {
-  // Define properties that the template will bind to
-  reconciliationResults: any;
-  depositoryAccountResults: any;
-  externalSettlements: any[];
-  netSecuritiesSettlements: any[];
-  settlementGLPostings: any;
-
-  // Mock‐data object (copy/paste of the JSON as a TS object)
-  private mockData = {
+export const MOCK_TED_DATA = {
     reconciliationResults: {
       frbReportedPositions: 11135398312558.43,
       frbReportedCusipCount: 16524,
@@ -94,13 +78,3 @@ export class TedComponent implements OnInit {
       lstUpdUserCredit: "XECOOCPZ"
     }
   };
-
-  ngOnInit(): void {
-    // Assign mock data to component properties so template can bind to them
-    this.reconciliationResults = this.mockData.reconciliationResults;
-    this.depositoryAccountResults = this.mockData.depositoryAccountResults;
-    this.externalSettlements = this.mockData.externalSettlements;
-    this.netSecuritiesSettlements = this.mockData.netSecuritiesSettlements;
-    this.settlementGLPostings = this.mockData.settlementGLPostings;
-  }
-}

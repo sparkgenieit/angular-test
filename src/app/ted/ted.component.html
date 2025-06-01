@@ -1,87 +1,249 @@
-
+<!-- dod.component.html -->
 <div class="content">
   <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div>
-        <label>Business Date:</label>
-        <input type="date" class="form-control d-inline w-auto" />
-      </div>
-      <div>
-        <span class="m-4">Processing Result</span>
-        <button class="btn btn-danger">Check Exception</button>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-8">
-        <div class="section-box">
-          <div class="section-header">Billing Summary</div>
-          <table class="table table-bordered text-center custom-table">
-              <tbody>
-          <tr>
-            <td><strong>{{ billing?.dodCharges }}</strong><br/><small>DOD Charges</small></td>
-            <td><strong>{{ billing?.trackingFees }}</strong><br/><small>Tracking & Misc Fees</small></td>
-            <td><strong>{{ billing?.adjustments }}</strong><br/><small>Adjustments</small></td>
-          </tr>
-          <tr>
-            <td><strong>{{ billing?.mioCharges }}</strong><br/><small>MIO Charges</small></td>
-            <td><strong>{{ billing?.mioFlatFees }}</strong><br/><small>MIO Flat Fees</small></td>
-            <td><strong>{{ billing?.totalFee }}</strong><br/><small>Total Fee</small></td>
-          </tr>
-        </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="col-md-4">
+    <div class="row two-column">
+      <!-- Left Column: Reconciliation Results & Depository-Account Results -->
+      <div class="col-md-6">
+        <!-- Reconciliation Results -->
         <div class="section-box mb-4">
-          <div class="section-header">Reference Data</div>
-          <table class="table table-bordered text-center custom-table">
-            <tbody>
-               <tr><td><strong>{{ referenceData?.chargeGroups }}</strong><br/><small>Charge Groups</small></td></tr>
-        <tr><td><strong>{{ referenceData?.clients }}</strong><br/><small>Clients</small></td></tr>
-     
-            </tbody>
-          </table>
-        </div>
-
-        <div class="section-box">
-          <div class="section-header">User Data</div>
-          <table class="table table-bordered text-center custom-table">
-            <tbody>
-            <tr><td><strong>{{ userData?.internal }}</strong><br/><small>Internal Users</small></td></tr>
-        <tr><td><strong>{{ userData?.external }}</strong><br/><small>External Users</small></td></tr>
-      
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="row mt-4">
-      <div class="col-12">
-        <div class="section-box">
-          <div class="section-header">DOD Source Files Processing Metrics</div>
+          <div class="section-header">Reconciliation Results</div>
           <table class="table table-bordered text-center custom-table">
             <thead>
-              <tr>
-                <th>Source Application</th>
-                <th>Processed</th>
-                <th>Unknown</th>
-                <th>Unprocessed</th>
-                <th>Verified</th>
-                <th>Total</th>
+              <tr class="bg-secondary text-white">
+                <th colspan="2" class="py-2">Reconciliation Results</th>
+                <th colspan="2" class="bg-danger text-white py-2">OUT-OF-PROOF</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let row of dodMetrics">
-            <td>{{ row.app }}</td>
-            <td>{{ row.processed }}</td>
-            <td>{{ row.unknown }}</td>
-            <td>{{ row.unprocessed }}</td>
-            <td>{{ row.verified }}</td>
-            <td>{{ row.total }}</td>
-          </tr>
+              <tr>
+                <td>FRB Reported Positions</td>
+                <td>
+                  <strong>
+                    $ {{ reconciliationResults?.frbReportedPositions | number : '1.2-2' }}
+                  </strong>
+                </td>
+                <td>FRB Reported CUSIP Count</td>
+                <td>
+                  <strong>{{ reconciliationResults?.frbReportedCusipCount }}</strong>
+                </td>
+              </tr>
+              <tr>
+                <td>BNY Current Positions</td>
+                <td>
+                  <strong>
+                    $ {{ reconciliationResults?.bnyCurrentPositions | number : '1.2-2' }}
+                  </strong>
+                </td>
+                <td>BDC EXTERNAL settled CUSIP Count</td>
+                <td>
+                  <strong>{{ reconciliationResults?.bdcExternalCusipCount }}</strong>
+                </td>
+              </tr>
+              <tr>
+                <td>Recon Diff in PAR Value</td>
+                <td class="text-danger">
+                  <strong>
+                    $ {{ reconciliationResults?.reconDiffParValue | number : '1.2-2' }}
+                  </strong>
+                </td>
+                <td>FRB Redemption CUSIP Count</td>
+                <td>
+                  <strong>{{ reconciliationResults?.frbRedemptionCusipCount }}</strong>
+                </td>
+              </tr>
+              <tr>
+                <td>Recon Diff by Security Position Count</td>
+                <td class="text-danger">
+                  <strong>{{ reconciliationResults?.reconDiffSecurityCount }}</strong>
+                </td>
+                <td>FRB Redemption PAR</td>
+                <td>
+                  <strong>
+                    $ {{ reconciliationResults?.frbRedemptionPar | number : '1.2-2' }}
+                  </strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Depository-Account Results -->
+        <div class="section-box mb-4">
+          <div class="section-header">By Depository-Account Reconciliation Results</div>
+          <table class="table table-bordered text-center custom-table">
+            <thead>
+              <tr class="bg-warning text-dark">
+                <th>1020</th>
+                <th>1030</th>
+                <th>1090</th>
+                <th>1080</th>
+                <th>U102</th>
+                <th>1050</th>
+                <th>1031</th>
+                <th>1040</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ depositoryAccountResults?.['1020'] }}</td>
+                <td>{{ depositoryAccountResults?.['1030'] }}</td>
+                <td>{{ depositoryAccountResults?.['1090'] }}</td>
+                <td>{{ depositoryAccountResults?.['1080'] }}</td>
+                <td>{{ depositoryAccountResults?.['U102'] }}</td>
+                <td>{{ depositoryAccountResults?.['1050'] }}</td>
+                <td>{{ depositoryAccountResults?.['1031'] }}</td>
+                <td>{{ depositoryAccountResults?.['1040'] }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right Column: External Settlements, Securities Settlements, GL Postings -->
+      <div class="col-md-6 right-col">
+        <!-- External Settlements -->
+        <div class="section-box mb-4">
+          <div class="section-header">
+            External Deliveries / Receives / Net FRB External Settlements
+          </div>
+              <table class="table table-bordered text-center custom-table external‐table">
+
+            <thead>
+              <tr class="bg-info text-white">
+                <th>Description</th>
+                <th>Credit $</th>
+                <th>Credit Count</th>
+                <th>Debit $</th>
+                <th>Debit Count</th>
+                <th>Net FRB External Settlements $ Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ext of externalSettlements">
+                <td>{{ ext.description }}</td>
+                <td>
+                  <strong>
+                    $ {{ ext.creditAmount | number : '1.2-2' }}
+                  </strong>
+                </td>
+                <td><strong>{{ ext.creditCount }}</strong></td>
+                <td>
+                  <strong>
+                    $ {{ ext.debitAmount | number : '1.2-2' }}
+                  </strong>
+                </td>
+                <td><strong>{{ ext.debitCount }}</strong></td>
+                <td>
+                  <strong>
+                    $ {{ ext.netValue | number : '1.2-2' }}
+                  </strong>
+                </td>
+              </tr>
+              <tr class="bg-success text-white">
+                <td colspan="6">
+                  <strong>RESULTS: IN PROOF</strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Securities Settlements -->
+        <div class="section-box mb-4">
+          <div class="section-header">
+            Net FRB Securities Settlements (Without Redemptions)
+          </div>
+          <table class="table table-bordered text-center custom-table">
+            <thead>
+              <tr class="bg-success text-white">
+                <th colspan="4">IN PROOF</th>
+              </tr>
+              <tr>
+                <th>Transfers</th>
+                <th>Count</th>
+                <th>Sum Net Amount</th>
+                <th>Net Difference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let sec of netSecuritiesSettlements">
+                <td>{{ sec.transferType }}</td>
+                <td><strong>{{ sec.count }}</strong></td>
+                <td>
+                  <strong>
+                    $ {{ sec.sumNetAmount | number : '1.2-2' }}
+                  </strong>
+                </td>
+                <td>
+                  <strong>
+                    $ {{ sec.netDifference | number : '1.2-2' }}
+                  </strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- GL Postings -->
+        <div class="section-box mb-4">
+          <div class="section-header">Settlement GL Postings</div>
+          <table class="table table-bordered text-center custom-table">
+            <thead>
+              <tr class="bg-warning text-dark">
+                <th>Field</th>
+                <th>Debit</th>
+                <th>Credit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>GL PST ID</td>
+                <td>{{ settlementGLPostings?.glPstIdDebit }}</td>
+                <td>{{ settlementGLPostings?.glPstIdCredit }}</td>
+              </tr>
+              <tr>
+                <td>GL PST DT</td>
+                <td>{{ settlementGLPostings?.glPstDtDebit }}</td>
+                <td>{{ settlementGLPostings?.glPstDtCredit }}</td>
+              </tr>
+              <tr>
+                <td>GL ACCT</td>
+                <td>{{ settlementGLPostings?.glAcctDebit }}</td>
+                <td>{{ settlementGLPostings?.glAcctCredit }}</td>
+              </tr>
+              <tr>
+                <td>COST CENTER</td>
+                <td>{{ settlementGLPostings?.costCenterDebit }}</td>
+                <td>{{ settlementGLPostings?.costCenterCredit }}</td>
+              </tr>
+              <tr>
+                <td>GL PST AMT</td>
+                <td>
+                  <strong>
+                    $ {{ settlementGLPostings?.glPstAmtDebit | number : '1.2-2' }}
+                  </strong>
+                </td>
+                <td>
+                  <strong>
+                    $ {{ settlementGLPostings?.glPstAmtCredit | number : '1.2-2' }}
+                  </strong>
+                </td>
+              </tr>
+              <tr>
+                <td>STATUS</td>
+                <td>{{ settlementGLPostings?.statusDebit }}</td>
+                <td>{{ settlementGLPostings?.statusCredit }}</td>
+              </tr>
+              <tr>
+                <td>LST UPD TS</td>
+                <td>{{ settlementGLPostings?.lstUpdTsDebit }}</td>
+                <td>{{ settlementGLPostings?.lstUpdTsCredit }}</td>
+              </tr>
+              <tr>
+                <td>LST UPD USER</td>
+                <td>{{ settlementGLPostings?.lstUpdUserDebit }}</td>
+                <td>{{ settlementGLPostings?.lstUpdUserCredit }}</td>
+              </tr>
             </tbody>
           </table>
         </div>

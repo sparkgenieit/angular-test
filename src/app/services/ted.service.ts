@@ -1,45 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-
-// Define interface for your expected data structure
-export interface TedData {
-  billing: any;
-  referenceData: any;
-  userData: any;
-  dodMetrics: any[];
-}
-
+import { Observable, of } from 'rxjs';
+//import { MOCK_TED_DATA } from '../Recon/clearance/ted/mock-data'; // adjust path
+import { MOCK_TED_DATA } from '../ted/mock-data'; 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root'
 })
 export class TedService {
-  private tedDataSubject = new BehaviorSubject<TedData | null>(null);
-  tedData$: Observable<TedData | null> = this.tedDataSubject.asObservable();
-  private loaded = false;
+    constructor() {}
 
-  constructor(private http: HttpClient) {}
-
-  getTedData(): Observable<TedData | null> {
-    if (!this.loaded) {
-      this.http
-        .get<TedData>('assets/mock-data.json')
-        .pipe(
-          tap((data) => {
-            console.log('TED Mock Data Loaded:', data);
-            this.tedDataSubject.next(data);
-            this.loaded = true;
-          })
-        )
-        .subscribe();
+    getTedData(): Observable<any> {
+        return of(MOCK_TED_DATA);
     }
-
-    return this.tedData$;
-  }
-
-  clearTedData() {
-    this.loaded = false;
-    this.tedDataSubject.next(null);
-  }
 }
